@@ -9,6 +9,10 @@
   <meta name="theme-color" content="#0b0f19" id="metaThemeColor">
   <title>ФинТрекер — Мобильный учет (GEL, USD, RUB)</title>
   <meta name="description" content="Ультра-адаптивный мобильный учет доходов и расходов в лари, долларах и рублях для iPhone 15 и Samsung S25 Ultra.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -304,6 +308,18 @@
         </div>
 
         <div class="settings-list-group">
+          <!-- Install PWA on Phone Item -->
+          <div class="settings-touch-item" id="installPwaBtn">
+            <div class="item-left">
+              <div class="item-icon-box green">📲</div>
+              <div class="item-texts">
+                <h4>Установить на телефон</h4>
+                <p>Добавить приложение на экран «Домой»</p>
+              </div>
+            </div>
+            <span class="chevron">&rsaquo;</span>
+          </div>
+
           <!-- Exchange Rates Item -->
           <div class="settings-touch-item" id="settingsRatesBtn">
             <div class="item-left">

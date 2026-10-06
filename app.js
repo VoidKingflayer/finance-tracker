@@ -192,6 +192,7 @@
     categoryTagsContainer: document.getElementById('categoryTagsContainer'),
 
     // Settings Screen Items
+    installPwaBtn: document.getElementById('installPwaBtn'),
     settingsRatesBtn: document.getElementById('settingsRatesBtn'),
     downloadBackupBtn: document.getElementById('downloadBackupBtn'),
     importFileBtn: document.getElementById('importFileBtn'),
@@ -488,6 +489,9 @@
     });
 
     // Settings screen actions
+    if (el.installPwaBtn) {
+      el.installPwaBtn.addEventListener('click', handleInstallPWA);
+    }
     el.settingsRatesBtn.addEventListener('click', openRatesModal);
     el.downloadBackupBtn.addEventListener('click', handleDownloadBackup);
     el.importFileBtn.addEventListener('click', () => el.importFileInput.click());
@@ -1174,6 +1178,47 @@
         if (toast.parentNode) toast.parentNode.removeChild(toast);
       }, 250);
     }, 2800);
+  }
+
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  function handleInstallPWA() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (isStandalone) {
+      showToast('Приложение уже установлено на телефоне!', 'success');
+      return;
+    }
+
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choice) => {
+        if (choice.outcome === 'accepted') {
+          showToast('Приложение установлено!', 'success');
+        }
+        deferredPrompt = null;
+      });
+      return;
+    }
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      alert('📲 Чтобы установить на iPhone:\n\n1. Нажмите иконку «Поделиться» (квадрат со стрелкой вверх ⬆️) в меню Safari.\n2. Выберите «На экран "Домой"» 📲.\n3. Нажмите «Добавить».');
+    } else {
+      alert('📲 Чтобы установить на телефон:\n\nОткройте меню браузера (три точки ⋮) и нажмите «Установить приложение» или «Добавить на главный экран».');
+    }
+  }
+
+  // Регистрация Service Worker для PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch((err) => {
+        console.warn('PWA Service Worker register:', err);
+      });
+    });
   }
 
   // Launch on DOM Ready
